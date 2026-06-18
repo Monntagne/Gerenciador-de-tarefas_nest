@@ -4,7 +4,7 @@ import { CreateTarefaDto } from './dto/create-tarefa.dto';
 import { UpdateTarefaDto } from './dto/update-tarefa.dto';
 import { RowDataPacket } from 'mysql2';
 import { Tarefa } from './interface/tarefa.interface';
-import { statSync } from 'fs';
+
 
 
 @Injectable()
@@ -18,7 +18,7 @@ export class TarefasService {
 async criar(createTarefaDto:CreateTarefaDto){
     const {titulo, descricao, status} = createTarefaDto;
     await connection.query(
-        'INSERT INTO tarefa (titulo, descicao, status) VALUES (?,?,?)',
+        'INSERT INTO tarefas (titulo, descricao, status) VALUES (?,?,?)',
         [titulo, descricao || '', status || 'Pendente']
     );
     return {
@@ -29,7 +29,7 @@ async criar(createTarefaDto:CreateTarefaDto){
 
 async buscarPorId(id:number): Promise <Tarefa>{
     const [tarefas] = await connection.query<RowDataPacket[]>(
-        'SELECT * FROM tarefa WHERE id =? ',
+        'SELECT * FROM tarefas WHERE id =? ',
         [id]
     );
     return tarefas [0] as Tarefa;
@@ -44,7 +44,7 @@ async atualizar(id: number, updateTarefaDto: UpdateTarefaDto){
     const status = updateTarefaDto.status ?? tarefaAtual.status;
 
     await connection.query(
-        'UPDATE tarefas SET titulo = ?, descicao =?, status =? WHERE id = ?', 
+        'UPDATE tarefas SET titulo = ?, descricao =?, status =? WHERE id = ?', 
         [titulo, descricao, status, id]
     )
     return {
@@ -56,7 +56,7 @@ async atualizar(id: number, updateTarefaDto: UpdateTarefaDto){
 async remover(id:number){
     await this.buscarPorId(id);
 
-    await connection.query('DELETE FROM tarefa WHERE id = ?', [id]);
+    await connection.query('DELETE FROM tarefas WHERE id = ?', [id]);
     return{
         mensagem: 'Tarefa removida com sucesso'
     };

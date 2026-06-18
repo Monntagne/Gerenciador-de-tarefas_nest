@@ -30,6 +30,10 @@ listar(){
 }
 
 @Get(':id')
+buscarPorId(@Param('id', ParseIntPipe)id:number){
+    return this.tarefasService.buscarPorId(id);
+}
+@Put(':id')
 atualizar(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTarefaDto: UpdateTarefaDto){
